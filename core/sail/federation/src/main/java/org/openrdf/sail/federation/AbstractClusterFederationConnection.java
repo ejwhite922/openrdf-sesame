@@ -1,34 +1,27 @@
-/* 
- * Licensed to Aduna under one or more contributor license agreements.  
- * See the NOTICE.txt file distributed with this work for additional 
- * information regarding copyright ownership. 
- *
- * Aduna licenses this file to you under the terms of the Aduna BSD 
- * License (the "License"); you may not use this file except in compliance 
- * with the License. See the LICENSE.txt file distributed with this work 
- * for the full License.
- *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or 
- * implied. See the License for the specific language governing permissions
- * and limitations under the License.
- */
 package org.openrdf.sail.federation;
 
 import info.aduna.iteration.CloseableIteration;
 import info.aduna.iteration.CloseableIteratorIteration;
 import info.aduna.iteration.DistinctIteration;
 import info.aduna.iteration.ExceptionConvertingIteration;
+import info.aduna.iteration.Iteration;
 import info.aduna.iteration.UnionIteration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.client.TableExistsException;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.data.Key;
 import org.openrdf.model.Namespace;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -55,6 +48,8 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
 import org.openrdf.sail.SailConnection;
 import org.openrdf.sail.SailException;
+import org.openrdf.sail.federation.Federation;
+import org.openrdf.sail.federation.PrefixHashSet;
 import org.openrdf.sail.federation.evaluation.FederationStrategy;
 import org.openrdf.sail.federation.optimizers.EmptyPatternOptimizer;
 import org.openrdf.sail.federation.optimizers.FederationJoinOptimizer;
@@ -74,18 +69,32 @@ import org.slf4j.LoggerFactory;
  * @author James Leigh
  * @author Arjohn Kampman
  */
-  abstract class AbstractFederationConnection extends SailConnectionBase {
+abstract class AbstractClusterFederationConnection extends SailConnectionBase {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AbstractFederationConnection.class);
+			.getLogger(AbstractClusterFederationConnection.class);
 
-	private final Federation federation;
+	private final ClusterFederation federation;
 
 	private final ValueFactory valueFactory;
 
 	protected final List<RepositoryConnection> members;
 
-	public AbstractFederationConnection(Federation federation,
+	private String zkServer;
+	
+	private final String instanceName;
+	
+	private String tableName;
+     
+   private String userName;
+     
+   private String passWord;
+   
+   private Set<String> includeSet = new HashSet<String>();
+   
+   private Iterator<Entry<Key, org.apache.accumulo.core.data.Value>> iterator;
+
+	public AbstractClusterFederationConnection(ClusterFederation federation,
 			List<RepositoryConnection> members) {
 		super(new SailBase() {
 
@@ -113,6 +122,50 @@ import org.slf4j.LoggerFactory;
 				// ignore
 			}
 		});
+
+		instanceName = "dev";
+
+		tableName = "rya_overlap";
+
+		zkServer = "localhost:2181";
+
+		userName="root";
+
+		passWord="root";
+
+		OverlapList at = new OverlapList(zkServer,instanceName);
+		
+
+		try {
+		   at.getConnection(userName, passWord);
+	      at.selectTable(tableName);
+	      Scanner sc;
+			sc = at.createScan();
+	      iterator = sc.iterator();
+		}
+		catch (TableNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (AccumuloException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (AccumuloSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (TableExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		  while (iterator.hasNext()) {
+			   Entry<Key, org.apache.accumulo.core.data.Value> entry = iterator.next();
+			   includeSet.add(entry.getKey().getRow().toString());
+
+			  }
+			 
 		this.federation = federation;
 
 		valueFactory = ValueFactoryImpl.getInstance();
@@ -243,21 +296,28 @@ import org.slf4j.LoggerFactory;
 			final Resource subj, final URI pred, final Value obj,
 			final boolean includeInferred, final Resource... contexts)
 			throws SailException {
-	//	System.out.println("federation get statement internal");
+		
+	//	System.out.println("cluster federation get statement internal");
+		
 		CloseableIteration<? extends Statement, SailException> cursor = union(new Function<Statement>() {
 
 			public CloseableIteration<? extends Statement, RepositoryException> call(
 					RepositoryConnection member) throws RepositoryException {
-				return member.getStatements(subj, pred, obj, includeInferred,
-						contexts);
+					return member.getStatements(subj, pred, obj, includeInferred,
+							contexts);	
+			
 			}
 		});
-
+   
 		if (!federation.isDistinct() && !isLocal(pred)) {
 			// Filter any duplicates
-			cursor = new DistinctIteration<Statement, SailException>(cursor);
-		}
 
+	  	cursor = new IntersectOverlapList<Statement, SailException>(cursor, includeSet);			
+		cursor = new DistinctIteration<Statement, SailException>(cursor);	
+			
+			
+		}
+		
 		return cursor;
 	}
 
@@ -287,9 +347,11 @@ import org.slf4j.LoggerFactory;
 		public CloseableIteration<? extends Statement, QueryEvaluationException> getStatements(
 				Resource subj, URI pred, Value obj, Resource... contexts)
 				throws QueryEvaluationException {
-			try {
-				CloseableIteration<? extends Statement, SailException> result = AbstractFederationConnection.this
+			try {			
+				System.out.println("cluster federation getStatements.");
+				CloseableIteration<? extends Statement, SailException> result = AbstractClusterFederationConnection.this
 						.getStatements(subj, pred, obj, inf, contexts);
+		
 				return new ExceptionConvertingIteration<Statement, QueryEvaluationException>(
 						result) {
 

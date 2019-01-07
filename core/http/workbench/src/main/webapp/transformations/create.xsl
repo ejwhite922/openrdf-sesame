@@ -23,7 +23,10 @@
 							<xsl:value-of select="$repository-type.label" />
 						</th>
 						<td>
-							<select id="type" name="type">
+							<select id="type" name="type">							
+								<option value="RyaAccumuloSail">
+									Rya Accumulo Store
+								</option>									
 								<option value="memory">
 									In Memory Store
 								</option>
@@ -66,7 +69,12 @@
 								<option value="sparql">
 									SPARQL endpoint proxy
 								</option>
-								<option value="federate">Federation Store</option>
+								<option value="federate">
+								Federation Store
+								</option>
+								<option value="ClusterFederation">
+								Cluster Federation Store
+								</option>
 							</select>
 						</td>
 						<td></td>

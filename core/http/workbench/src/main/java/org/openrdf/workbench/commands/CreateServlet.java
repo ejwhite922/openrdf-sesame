@@ -46,14 +46,17 @@ import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.StatementCollector;
+import org.openrdf.runtime.RepositoryManagerClusterFederator;
 import org.openrdf.runtime.RepositoryManagerFederator;
 import org.openrdf.workbench.base.TransformationServlet;
 import org.openrdf.workbench.util.TupleResultBuilder;
 import org.openrdf.workbench.util.WorkbenchRequest;
 
+
 public class CreateServlet extends TransformationServlet {
 
 	private RepositoryManagerFederator rmf;
+   private RepositoryManagerClusterFederator rmcf;
 
 	@Override
 	public void init(final ServletConfig config)
@@ -61,6 +64,7 @@ public class CreateServlet extends TransformationServlet {
 	{
 		super.init(config);
 		this.rmf = new RepositoryManagerFederator(manager);
+		this.rmcf = new RepositoryManagerClusterFederator(manager);
 	}
 
 	/**
@@ -92,20 +96,29 @@ public class CreateServlet extends TransformationServlet {
 	{
 		final TupleResultBuilder builder = getTupleResultBuilder(req, resp, resp.getOutputStream());
 		boolean federate;
+		boolean clusterFederate;
 		if (req.isParameterPresent("type")) {
 			final String type = req.getTypeParameter();
 			federate = "federate".equals(type);
+			clusterFederate="ClusterFederation".equals(type);
 			builder.transform(xslPath, "create-" + type + ".xsl");
 		}
 		else {
 			federate = false;
+			clusterFederate=false;
 			builder.transform(xslPath, "create.xsl");
 		}
-		builder.start(federate ? new String[] { "id", "description", "location" } : new String[] {});
+		if(federate||clusterFederate){
+			builder.start(new String[] { "id", "description", "location" });
+		}else{
+			builder.start(new String[] {});
+		}
+//		builder.start(federate ? new String[] { "id", "description", "location" } : new String[] {});
 		builder.link(Arrays.asList(INFO));
-		if (federate) {
+		if (federate||clusterFederate) {
 			for (RepositoryInfo info : manager.getAllRepositoryInfos()) {
 				String identity = info.getId();
+				System.out.println(identity);
 				if (!SystemRepository.ID.equals(identity)) {
 					builder.result(identity, info.getDescription(), info.getLocation());
 				}
@@ -125,6 +138,13 @@ public class CreateServlet extends TransformationServlet {
 					Arrays.asList(req.getParameterValues("memberID")),
 					Boolean.parseBoolean(req.getParameter("readonly")),
 					Boolean.parseBoolean(req.getParameter("distinct")));
+		}
+		else if ("ClusterFederation".equals(type)){
+			newID = req.getParameter("Local repository ID");
+			rmcf.addFed(newID, req.getParameter("Repository title"),
+					Arrays.asList(req.getParameterValues("memberID")),
+					Boolean.parseBoolean(req.getParameter("readonly")),
+					Boolean.parseBoolean(req.getParameter("distinct")));	
 		}
 		else {
 			newID = updateRepositoryConfig(getConfigTemplate(type).render(req.getSingleParameterMap())).getID();

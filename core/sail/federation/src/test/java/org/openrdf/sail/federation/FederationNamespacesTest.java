@@ -130,7 +130,7 @@ public class FederationNamespacesTest extends TestCase {
 		member.initialize();
 		SailRepositoryConnection con = member.getConnection();
 		try {
-			con.setNamespace(PREFIX, name);
+			con.setNamespace(PREFIX, name); 
 		}
 		finally {
 			con.close();
