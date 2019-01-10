@@ -74,7 +74,7 @@ import org.slf4j.LoggerFactory;
  * @author James Leigh
  * @author Arjohn Kampman
  */
-  abstract class AbstractFederationConnection extends SailConnectionBase {
+abstract class AbstractFederationConnection extends SailConnectionBase {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AbstractFederationConnection.class);
@@ -243,7 +243,6 @@ import org.slf4j.LoggerFactory;
 			final Resource subj, final URI pred, final Value obj,
 			final boolean includeInferred, final Resource... contexts)
 			throws SailException {
-	//	System.out.println("federation get statement internal");
 		CloseableIteration<? extends Statement, SailException> cursor = union(new Function<Statement>() {
 
 			public CloseableIteration<? extends Statement, RepositoryException> call(
