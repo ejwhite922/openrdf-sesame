@@ -37,6 +37,11 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>sesame-runtime-cluster</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>sesame-http-protocol</artifactId>
 			<version>${project.version}</version>
 		</dependency>

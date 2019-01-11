@@ -27,6 +27,7 @@
 	 <module>console</module>
 	 <module>http</module>
 	 <module>runtime</module>
+	 <module>runtime-cluster</module>
 	 <module>runtime-osgi</module>
   </modules>
 

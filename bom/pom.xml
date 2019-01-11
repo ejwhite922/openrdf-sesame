@@ -226,6 +226,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openrdf.sesame</groupId>
+				<artifactId>sesame-runtime-cluster</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openrdf.sesame</groupId>
 				<artifactId>sesame-runtime-osgi</artifactId>
 				<version>${project.version}</version>
 			</dependency>
