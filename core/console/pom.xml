@@ -18,12 +18,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>sesame-runtime</artifactId>
 			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.accumulo</groupId>
-					<artifactId>accumulo-core</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>

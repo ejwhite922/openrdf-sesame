@@ -72,12 +72,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>sesame-sail-federation</artifactId>
 			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.accumulo</groupId>
-					<artifactId>accumulo-core</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>

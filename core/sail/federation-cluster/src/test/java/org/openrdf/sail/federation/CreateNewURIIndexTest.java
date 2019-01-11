@@ -23,8 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.skjegstad.utils.BloomFilter;
-
+import org.apache.accumulo.core.bloomfilter.BloomFilter;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchWriter;
@@ -37,6 +36,7 @@ import org.apache.accumulo.core.client.admin.TableOperations;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.file.keyfunctor.RowFunctor;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 
@@ -82,7 +82,7 @@ public class CreateNewURIIndexTest {
 		String url13 = "smb://192.168.33.30/share/3";
 		SmbFile  file13 = new SmbFile(url13);
       ObjectInputStream in13 = new ObjectInputStream(file13.getInputStream());
-      BloomFilter<String> instance13 = (BloomFilter)in13.readObject();
+      BloomFilter instance13 = (BloomFilter)in13.readObject();
        
       in13.close();
   //    file3.close();
@@ -93,7 +93,7 @@ public class CreateNewURIIndexTest {
       ObjectInputStream in15 = new ObjectInputStream(file15.getInputStream());
        
       // Method for deserialization of object
-      BloomFilter<String> instance15 = (BloomFilter)in15.readObject();
+      BloomFilter instance15 = (BloomFilter)in15.readObject();
        
       in15.close();
      
@@ -133,12 +133,14 @@ public class CreateNewURIIndexTest {
 	Iterator<Map.Entry<Key,Value>> iterator1 = scan1.iterator();
 	  while (iterator1.hasNext()) {
 		   Map.Entry<Key,Value> entry1 = iterator1.next();
-		   String key1 = entry1.getKey().getRow().toString();
-		   if(instance13.contains(key1)){
-		   	overlap13.add(key1);
+		   final Key accumuloKey = entry1.getKey();
+		   final RowFunctor rowFunctor = new RowFunctor();
+		   final org.apache.hadoop.util.bloom.Key key1 = rowFunctor.transform(accumuloKey);
+		   if(instance13.membershipTest(key1)){
+		   	overlap13.add(key1.toString());
 		   }
-		   if(instance15.contains(key1)){
-		   	overlap15.add(key1);
+		   if(instance15.membershipTest(key1)){
+		   	overlap15.add(key1.toString());
 		   }
 	  }
 	   TableOperations ops = conn1.tableOperations();

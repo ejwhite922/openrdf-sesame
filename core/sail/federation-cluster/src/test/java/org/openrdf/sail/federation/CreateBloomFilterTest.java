@@ -21,17 +21,16 @@ import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.skjegstad.utils.BloomFilter;
-
+import org.apache.accumulo.core.bloomfilter.BloomFilter;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.file.keyfunctor.RowFunctor;
 import org.apache.accumulo.core.security.Authorizations;
-
-import mvm.provenance.Hasher;
+import org.apache.hadoop.util.hash.Hash;
 
 /**
  *
@@ -39,13 +38,10 @@ import mvm.provenance.Hasher;
  */
 public class CreateBloomFilterTest {
 	public static void main(String[] args) throws Exception {
-      Hasher h = new Hasher(0);
-      final int M = 100000;
- //     final int N = 1000;
-      double proba = 0.01;
-      int metric = 1;
-      BloomFilter<String> instance = new BloomFilter<String>(h, proba,
-              M, metric);
+        final int vectorSize = 100000;
+        final int nbHash = 500;
+        final int hashType = Hash.MURMUR_HASH;
+        final BloomFilter bloomFilter = new BloomFilter(vectorSize, nbHash, hashType);
       
    	String instanceName = "dev";
 	   String tableURI ="URI_index";
@@ -68,14 +64,16 @@ public class CreateBloomFilterTest {
 		Iterator<Map.Entry<Key,Value>> iterator = scanURI.iterator();
 		while(iterator.hasNext()){
 		   Map.Entry<Key,Value> entry = iterator.next();
-		   String key = entry.getKey().getRow().toString();
-		   instance.add(key);
+		   final Key accumuloKey = entry.getKey();
+		   final RowFunctor rowFunctor = new RowFunctor();
+		   final org.apache.hadoop.util.bloom.Key key = rowFunctor.transform(accumuloKey);
+		   bloomFilter.add(key);
 		}
 		
       FileOutputStream file = new FileOutputStream("/home/vagrant/share/3");
       ObjectOutputStream out = new ObjectOutputStream(file);
       // Method for serialization of object
-      out.writeObject(instance);
+      out.writeObject(bloomFilter);
        
       out.close();
       file.close();
