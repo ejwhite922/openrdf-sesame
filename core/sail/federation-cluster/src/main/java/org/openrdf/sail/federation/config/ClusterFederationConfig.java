@@ -1,41 +1,41 @@
-/* 
- * Licensed to Aduna under one or more contributor license agreements.  
- * See the NOTICE.txt file distributed with this work for additional 
- * information regarding copyright ownership. 
+/*
+ * Licensed to Aduna under one or more contributor license agreements.
+ * See the NOTICE.txt file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * Aduna licenses this file to you under the terms of the Aduna BSD 
- * License (the "License"); you may not use this file except in compliance 
- * with the License. See the LICENSE.txt file distributed with this work 
+ * Aduna licenses this file to you under the terms of the Aduna BSD
+ * License (the "License"); you may not use this file except in compliance
+ * with the License. See the LICENSE.txt file distributed with this work
  * for the full License.
  *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
  * implied. See the License for the specific language governing permissions
  * and limitations under the License.
  */
 package org.openrdf.sail.federation.config;
 
-import org.openrdf.sail.federation.config.FederationConfig;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  *
  * @author vagrant
  */
 
-/* 
- * Licensed to Aduna under one or more contributor license agreements.  
- * See the NOTICE.txt file distributed with this work for additional 
- * information regarding copyright ownership. 
+/*
+ * Licensed to Aduna under one or more contributor license agreements.
+ * See the NOTICE.txt file distributed with this work for additional
+ * information regarding copyright ownership.
  *
- * Aduna licenses this file to you under the terms of the Aduna BSD 
- * License (the "License"); you may not use this file except in compliance 
- * with the License. See the LICENSE.txt file distributed with this work 
+ * Aduna licenses this file to you under the terms of the Aduna BSD
+ * License (the "License"); you may not use this file except in compliance
+ * with the License. See the LICENSE.txt file distributed with this work
  * for the full License.
  *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
  * implied. See the License for the specific language governing permissions
  * and limitations under the License.
  */
@@ -66,137 +66,160 @@ import org.openrdf.sail.config.SailImplConfigBase;
 /**
  * Lists the members of a federation and which properties describe a resource
  * subject in a unique member.
- * 
- * @author James Leigh
  */
 public class ClusterFederationConfig extends SailImplConfigBase {
 
-	/** http://www.openrdf.org/config/sail/federation# */
-	public static final String NAMESPACE = "http://www.openrdf.org/config/sail/clusterfederation#";
+    /** http://www.openrdf.org/config/sail/federation# */
+    public static final String NAMESPACE = "http://www.openrdf.org/config/sail/clusterfederation#";
 
-	public static final URI MEMBER = new URIImpl(NAMESPACE + "member");
+    public static final URI MEMBER = new URIImpl(NAMESPACE + "member");
 
-	/**
-	 * For all triples with a predicate in this space, the container RDF store
-	 * contains all triples with that subject and any predicate in this space.
-	 */
-	public static final URI LOCALPROPERTYSPACE = new URIImpl(NAMESPACE // NOPMD
-			+ "localPropertySpace");
+    /**
+     * For all triples with a predicate in this space, the container RDF store
+     * contains all triples with that subject and any predicate in this space.
+     */
+    public static final URI LOCALPROPERTYSPACE = new URIImpl(NAMESPACE // NOPMD
+            + "localPropertySpace");
 
-	/**
-	 * If no two members contain the same statement.
-	 */
-	public static final URI DISTINCT = new URIImpl(NAMESPACE + "distinct");
+    /**
+     * If no two members contain the same statement.
+     */
+    public static final URI DISTINCT = new URIImpl(NAMESPACE + "distinct");
 
-	/**
-	 * If the federation should not try and add statements to its members.
-	 */
-	public static final URI READ_ONLY = new URIImpl(NAMESPACE + "readOnly");
+    /**
+     * If the federation should not try and add statements to its members.
+     */
+    public static final URI READ_ONLY = new URIImpl(NAMESPACE + "readOnly");
 
-	private List<RepositoryImplConfig> members = new ArrayList<RepositoryImplConfig>();
+    /**
+     * The zookeeper host server.
+     */
+    public static final URI ZK_SERVER = new URIImpl(NAMESPACE + "zkServer");
 
-	private final Set<String> localPropertySpace = new HashSet<String>(); // NOPMD
+    private List<RepositoryImplConfig> members = new ArrayList<RepositoryImplConfig>();
 
-	private boolean distinct;
+    private final Set<String> localPropertySpace = new HashSet<String>(); // NOPMD
 
-	private boolean readOnly;
+    private boolean distinct;
 
-	public List<RepositoryImplConfig> getMembers() {
-		return members;
-	}
+    private boolean readOnly;
 
-	public void setMembers(List<RepositoryImplConfig> members) {
-		this.members = members;
-	}
+    private String zkServer;
 
-	public void addMember(RepositoryImplConfig member) {
-		members.add(member);
-	}
+    public List<RepositoryImplConfig> getMembers() {
+        return members;
+    }
 
-	public Set<String> getLocalPropertySpace() {
-		return localPropertySpace;
-	}
+    public void setMembers(final List<RepositoryImplConfig> members) {
+        this.members = members;
+    }
 
-	public void addLocalPropertySpace(String localPropertySpace) { // NOPMD
-		this.localPropertySpace.add(localPropertySpace);
-	}
+    public void addMember(final RepositoryImplConfig member) {
+        members.add(member);
+    }
 
-	public boolean isDistinct() {
-		return distinct;
-	}
+    public Set<String> getLocalPropertySpace() {
+        return localPropertySpace;
+    }
 
-	public void setDistinct(boolean disjoint) {
-		this.distinct = disjoint;
-	}
+    public void addLocalPropertySpace(final String localPropertySpace) { // NOPMD
+        this.localPropertySpace.add(localPropertySpace);
+    }
 
-	public boolean isReadOnly() {
-		return readOnly;
-	}
+    public boolean isDistinct() {
+        return distinct;
+    }
 
-	public void setReadOnly(boolean readOnly) {
-		this.readOnly = readOnly;
-	}
+    public void setDistinct(final boolean disjoint) {
+        this.distinct = disjoint;
+    }
 
-	@Override
-	public Resource export(Graph model) {
-		ValueFactory valueFactory = ValueFactoryImpl.getInstance();
-		Resource self = super.export(model);
-		for (RepositoryImplConfig member : getMembers()) {
-			model.add(self, MEMBER, member.export(model));
-		}
-		for (String space : getLocalPropertySpace()) {
-			model.add(self, LOCALPROPERTYSPACE, valueFactory.createURI(space));
-		}
-		model.add(self, DISTINCT, valueFactory.createLiteral(distinct));
-		model.add(self, READ_ONLY, valueFactory.createLiteral(readOnly));
-		return self;
-	}
+    public boolean isReadOnly() {
+        return readOnly;
+    }
 
-	@Override
-	public void parse(Graph graph, Resource implNode)
-			throws SailConfigException {
-		super.parse(graph, implNode);
-		LinkedHashModel model = new LinkedHashModel(graph);
-		for (Value member : model.filter(implNode, MEMBER, null).objects()) {
-			try {
-				addMember(create(graph, (Resource) member));
-			} catch (RepositoryConfigException e) {
-				throw new SailConfigException(e);
-			}
-		}
-		for (Value space : model.filter(implNode, LOCALPROPERTYSPACE, null)
-				.objects()) {
-			addLocalPropertySpace(space.stringValue());
-		}
-		try {
-			Literal bool = model.filter(implNode, DISTINCT, null)
-					.objectLiteral();
-			if (bool != null && bool.booleanValue()) {
-				distinct = true;
-			}
-			bool = model.filter(implNode, READ_ONLY, null).objectLiteral();
-			if (bool != null && bool.booleanValue()) {
-				readOnly = true;
-			}
-		} catch (ModelException e) {
-			throw new SailConfigException(e);
-		}
-	}
+    public void setReadOnly(final boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 
-	@Override
-	public void validate() throws SailConfigException {
-		super.validate();
-		if (members.isEmpty()) {
-			throw new SailConfigException("No cluster federation members specified");
-		}
-		for (RepositoryImplConfig member : members) {
-			try {
-				member.validate();
-			} catch (RepositoryConfigException e) {
-				throw new SailConfigException(e);
-			}
-		}
-	}
+    /**
+     * @return the zookeeper host server.
+     */
+    public String getZkServer() {
+        return zkServer;
+    }
 
+    /**
+     * @param zkServer the zookeeper host server. (not null)
+     */
+    public void setZkServer(final String zkServers) {
+        this.zkServer = checkNotNull(zkServers);
+    }
+
+    @Override
+    public Resource export(final Graph model) {
+        final ValueFactory valueFactory = ValueFactoryImpl.getInstance();
+        final Resource self = super.export(model);
+        for (final RepositoryImplConfig member : getMembers()) {
+            model.add(self, MEMBER, member.export(model));
+        }
+        for (final String space : getLocalPropertySpace()) {
+            model.add(self, LOCALPROPERTYSPACE, valueFactory.createURI(space));
+        }
+        model.add(self, DISTINCT, valueFactory.createLiteral(distinct));
+        model.add(self, READ_ONLY, valueFactory.createLiteral(readOnly));
+        model.add(self, ZK_SERVER, valueFactory.createLiteral(zkServer));
+        return self;
+    }
+
+    @Override
+    public void parse(final Graph graph, final Resource implNode)
+            throws SailConfigException {
+        super.parse(graph, implNode);
+        final LinkedHashModel model = new LinkedHashModel(graph);
+        for (final Value member : model.filter(implNode, MEMBER, null).objects()) {
+            try {
+                addMember(create(graph, (Resource) member));
+            } catch (final RepositoryConfigException e) {
+                throw new SailConfigException(e);
+            }
+        }
+        for (final Value space : model.filter(implNode, LOCALPROPERTYSPACE, null)
+                .objects()) {
+            addLocalPropertySpace(space.stringValue());
+        }
+        try {
+            Literal bool = model.filter(implNode, DISTINCT, null)
+                    .objectLiteral();
+            if (bool != null && bool.booleanValue()) {
+                distinct = true;
+            }
+            bool = model.filter(implNode, READ_ONLY, null).objectLiteral();
+            if (bool != null && bool.booleanValue()) {
+                readOnly = true;
+            }
+            final Literal zookeeper = model.filter(implNode, ZK_SERVER, null)
+                    .objectLiteral();
+            if (zookeeper != null) {
+                zkServer = zookeeper.stringValue();
+            }
+        } catch (final ModelException e) {
+            throw new SailConfigException(e);
+        }
+    }
+
+    @Override
+    public void validate() throws SailConfigException {
+        super.validate();
+        if (members.isEmpty()) {
+            throw new SailConfigException("No cluster federation members specified");
+        }
+        for (final RepositoryImplConfig member : members) {
+            try {
+                member.validate();
+            } catch (final RepositoryConfigException e) {
+                throw new SailConfigException(e);
+            }
+        }
+    }
 }
-

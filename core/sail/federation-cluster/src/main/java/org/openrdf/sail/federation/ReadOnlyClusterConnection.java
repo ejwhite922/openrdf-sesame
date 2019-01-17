@@ -8,71 +8,66 @@ import org.openrdf.model.Value;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.sail.SailException;
 import org.openrdf.sail.SailReadOnlyException;
-import org.openrdf.sail.federation.Federation;
 
-class ReadOnlyClusterConnection extends AbstractClusterFederationConnection{
-	
-	public ReadOnlyClusterConnection(ClusterFederation federation, List<RepositoryConnection> members) {
-		super(federation, members);
-	}
+/**
+ * Finishes the {@link AbstractClusterFederationConnection} by throwing
+ * {@link SailReadOnlyException}s for all write operations except for setting
+ * and clearing the internal namespaces.
+ */
+class ReadOnlyClusterConnection extends AbstractClusterFederationConnection {
+    /**
+     * Creates a new instance of {@link ReadOnlyClusterConnection}.
+     * @param federation the {@link ClusterFederation} to connect to.
+     * @param members the {@link List} of {@link RepositoryConnection}s that
+     * are members of the cluster.
+     */
+    public ReadOnlyClusterConnection(final ClusterFederation federation, final List<RepositoryConnection> members) {
+        super(federation, members);
+    }
 
+    @Override
+    public void setNamespaceInternal(final String prefix, final String name) throws SailException {
+    }
 
+    @Override
+    public void clearNamespacesInternal() throws SailException {
+    }
 
-	@Override
-	public void removeNamespaceInternal(String prefix)
-		throws SailException
-	{
-		throw new SailReadOnlyException("");
-	}
+    @Override
+    public void removeNamespaceInternal(final String prefix)
+        throws SailException
+    {
+        throw new SailReadOnlyException("");
+    }
 
-	@Override
-	public void addStatementInternal(Resource subj, URI pred, Value obj, Resource... contexts)
-		throws SailException
-	{
-		throw new SailReadOnlyException("");
-	}
+    @Override
+    public void addStatementInternal(final Resource subj, final URI pred, final Value obj, final Resource... contexts)
+        throws SailException
+    {
+        throw new SailReadOnlyException("");
+    }
 
-	@Override
-	public void removeStatementsInternal(Resource subj, URI pred, Value obj, Resource... context)
-		throws SailException
-	{
-		throw new SailReadOnlyException("");
-	}
+    @Override
+    public void removeStatementsInternal(final Resource subj, final URI pred, final Value obj, final Resource... context)
+        throws SailException
+    {
+        throw new SailReadOnlyException("");
+    }
 
-	@Override
-	protected void clearInternal(Resource... contexts) throws SailException {
-		throw new SailReadOnlyException("");
-	}
+    @Override
+    protected void clearInternal(final Resource... contexts) throws SailException {
+        throw new SailReadOnlyException("");
+    }
 
-	@Override
-	protected void commitInternal() throws SailException {
-		// no-op
-	}
+    @Override
+    protected void commitInternal() throws SailException {
+    }
 
-	@Override
-	protected void rollbackInternal() throws SailException {
-		// no-op
-	}
+    @Override
+    protected void rollbackInternal() throws SailException {
+    }
 
-	@Override
-	protected void startTransactionInternal() throws SailException {
-		// no-op
-	}
-
-
-
-	@Override
-	protected void setNamespaceInternal(String prefix, String name) throws SailException {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	protected void clearNamespacesInternal() throws SailException {
-		// TODO Auto-generated method stub
-		
-	}
-	
+    @Override
+    protected void startTransactionInternal() throws SailException {
+    }
 }
