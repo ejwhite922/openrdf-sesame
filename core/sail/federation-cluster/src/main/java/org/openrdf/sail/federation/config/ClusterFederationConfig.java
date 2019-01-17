@@ -92,9 +92,29 @@ public class ClusterFederationConfig extends SailImplConfigBase {
     public static final URI READ_ONLY = new URIImpl(NAMESPACE + "readOnly");
 
     /**
+     * The accumulo instance name.
+     */
+    public static final URI INSTANCE_NAME = new URIImpl(NAMESPACE + "instanceName");
+
+    /**
+     * The accumulo table name.
+     */
+    public static final URI TABLE_NAME = new URIImpl(NAMESPACE + "tableName");
+
+    /**
      * The zookeeper host server.
      */
     public static final URI ZK_SERVER = new URIImpl(NAMESPACE + "zkServer");
+
+    /**
+     * The accumulo username.
+     */
+    public static final URI USERNAME = new URIImpl(NAMESPACE + "username");
+
+    /**
+     * The accumulo user password.
+     */
+    public static final URI PASSWORD = new URIImpl(NAMESPACE + "password");
 
     private List<RepositoryImplConfig> members = new ArrayList<RepositoryImplConfig>();
 
@@ -104,7 +124,15 @@ public class ClusterFederationConfig extends SailImplConfigBase {
 
     private boolean readOnly;
 
+    private String instanceName;
+
+    private String tableName;
+
     private String zkServer;
+
+    private String username;
+
+    private String password;
 
     public List<RepositoryImplConfig> getMembers() {
         return members;
@@ -143,6 +171,32 @@ public class ClusterFederationConfig extends SailImplConfigBase {
     }
 
     /**
+     * @return the accumulo instance name.
+     */
+    public String getInstanceName() {
+        return instanceName;
+    }
+
+    /**
+     * @param instanceName the accumulo instance name. (not null)
+     */
+    public void setInstanceName(final String instanceName) {
+        this.instanceName = checkNotNull(instanceName);
+    }
+    /**
+     * @return the accumulo table name.
+     */
+    public String getTableName() {
+        return tableName;
+    }
+
+    /**
+     * @param tableName the accumulo table name. (not null)
+     */
+    public void setTableName(final String tableName) {
+        this.tableName = checkNotNull(tableName);
+    }
+    /**
      * @return the zookeeper host server.
      */
     public String getZkServer() {
@@ -154,6 +208,32 @@ public class ClusterFederationConfig extends SailImplConfigBase {
      */
     public void setZkServer(final String zkServers) {
         this.zkServer = checkNotNull(zkServers);
+    }
+    /**
+     * @return the accumulo username.
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @param username the accumulo username. (not null)
+     */
+    public void setUsername(final String username) {
+        this.username = checkNotNull(username);
+    }
+    /**
+     * @return the accumulo user password.
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the accumulo user password. (not null)
+     */
+    public void setPassword(final String password) {
+        this.password = checkNotNull(password);
     }
 
     @Override
@@ -168,7 +248,11 @@ public class ClusterFederationConfig extends SailImplConfigBase {
         }
         model.add(self, DISTINCT, valueFactory.createLiteral(distinct));
         model.add(self, READ_ONLY, valueFactory.createLiteral(readOnly));
+        model.add(self, INSTANCE_NAME, valueFactory.createLiteral(instanceName));
+        model.add(self, TABLE_NAME, valueFactory.createLiteral(tableName));
         model.add(self, ZK_SERVER, valueFactory.createLiteral(zkServer));
+        model.add(self, USERNAME, valueFactory.createLiteral(username));
+        model.add(self, PASSWORD, valueFactory.createLiteral(password));
         return self;
     }
 
@@ -198,10 +282,30 @@ public class ClusterFederationConfig extends SailImplConfigBase {
             if (bool != null && bool.booleanValue()) {
                 readOnly = true;
             }
-            final Literal zookeeper = model.filter(implNode, ZK_SERVER, null)
+            final Literal instanceName = model.filter(implNode, INSTANCE_NAME, null)
                     .objectLiteral();
-            if (zookeeper != null) {
-                zkServer = zookeeper.stringValue();
+            if (instanceName != null) {
+                this.instanceName = instanceName.stringValue();
+            }
+            final Literal tableName = model.filter(implNode, TABLE_NAME, null)
+                    .objectLiteral();
+            if (tableName != null) {
+                this.tableName = tableName.stringValue();
+            }
+            final Literal zkServer = model.filter(implNode, ZK_SERVER, null)
+                    .objectLiteral();
+            if (zkServer != null) {
+                this.zkServer = zkServer.stringValue();
+            }
+            final Literal username = model.filter(implNode, USERNAME, null)
+                    .objectLiteral();
+            if (username != null) {
+                this.username = username.stringValue();
+            }
+            final Literal password = model.filter(implNode, PASSWORD, null)
+                    .objectLiteral();
+            if (password != null) {
+                this.password = password.stringValue();
             }
         } catch (final ModelException e) {
             throw new SailConfigException(e);

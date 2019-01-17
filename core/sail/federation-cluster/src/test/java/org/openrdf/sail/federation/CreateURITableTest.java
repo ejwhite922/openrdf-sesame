@@ -45,17 +45,17 @@ public class CreateURITableTest {
         final String zkServer1 = "192.168.33.10:2181";
         final String zkServer2 = "192.168.33.20:2181";
 
-        final String userName = "root";
+        final String username = "root";
 
-        final String passWord = "root";
+        final String password = "root";
 
         final Set<String> list = new HashSet<String>();
 
         final Instance inst1 = new ZooKeeperInstance(instanceName, zkServer1);
-        final Connector conn1 = inst1.getConnector(userName, new PasswordToken(passWord));
+        final Connector conn1 = inst1.getConnector(username, new PasswordToken(password));
 
         final Instance inst2 = new ZooKeeperInstance(instanceName, zkServer2);
-        final Connector conn2 = inst2.getConnector(userName, new PasswordToken(passWord));
+        final Connector conn2 = inst2.getConnector(username, new PasswordToken(password));
 
         final Scanner scan2SPO = conn2.createScanner(tableSPO, new Authorizations());
         final Scanner scan2OSP = conn2.createScanner(tableOSP, new Authorizations());

@@ -12,6 +12,7 @@ import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
+import org.apache.commons.lang.StringUtils;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -19,6 +20,7 @@ import org.openrdf.model.Value;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.sail.SailConnection;
 import org.openrdf.sail.SailException;
+import org.openrdf.sail.federation.config.ClusterFederationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,15 +36,7 @@ abstract class AbstractClusterFederationConnection extends AbstractFederationCon
     private static final Logger LOGGER = LoggerFactory
             .getLogger(AbstractClusterFederationConnection.class);
 
-    private final String zkServer;
-
-    private final String instanceName;
-
-    private final String tableName;
-
-    private final String userName;
-
-    private final String passWord;
+    private final ClusterFederationConfig config;
 
     private final Set<String> includeSet = new HashSet<String>();
 
@@ -58,20 +52,18 @@ abstract class AbstractClusterFederationConnection extends AbstractFederationCon
             final List<RepositoryConnection> members) {
         super(federation, members);
 
-        instanceName = "dev";
+        this.config = federation.getConfig();
 
-        tableName = "rya_overlap";
-
-        zkServer = "localhost:2181";
-
-        userName = "root";
-
-        passWord = "root";
+        final String instanceName = StringUtils.defaultIfEmpty(config.getInstanceName(), "dev");
+        final String tableName = StringUtils.defaultIfEmpty(config.getTableName(), "rya_overlap");
+        final String zkServer = StringUtils.defaultIfEmpty(config.getZkServer(), "localhost:2181");
+        final String username = StringUtils.defaultIfEmpty(config.getUsername(), "root");
+        final String password = StringUtils.defaultIfEmpty(config.getPassword(), "root");
 
         final OverlapList at = new OverlapList(zkServer, instanceName);
 
         try {
-            at.createConnection(userName, passWord);
+            at.createConnection(username, password);
             at.selectTable(tableName);
             final Scanner sc = at.createScanner();
             iterator = sc.iterator();

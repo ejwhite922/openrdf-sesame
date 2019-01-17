@@ -34,10 +34,10 @@ public class OverlapListQuery7 {
         final String zkServer = "localhost:2181";
         final OverlapList at = new OverlapList(zkServer, instanceName);
 
-        final String userName = "root";
-        final String passWord = "root";
+        final String username = "root";
+        final String password = "root";
 
-        at.createConnection(userName, passWord);
+        at.createConnection(username, password);
         at.selectTable(tableName);
         final Scanner sc = at.createScanner();
 
@@ -54,20 +54,20 @@ public class OverlapListQuery7 {
         final String dept1 = "Department1";
         final String dept2 = "Department2";
         final String dept3 = "Department3";
-        final String course1  = "CourseU1";
-        final String course2  = "GraduateCourseU1";
-        final String course3  = "CourseU2";
-        final String course4  = "GraduateCourseU2";
-        final String course5  = "CourseU3";
-        final String course6  = "GraduateCourseU3";
-        final String course7  = "CourseU4";
-        final String course8  = "GraduateCourseU4";
-        final String course15  = "Course15";
-        final String course16  = "Course16";
-        final String course17  = "GraduateCourse17";
-        final String course18  = "GraduateCourse18";
+        final String course1 = "CourseU1";
+        final String course2 = "GraduateCourseU1";
+        final String course3 = "CourseU2";
+        final String course4 = "GraduateCourseU2";
+        final String course5 = "CourseU3";
+        final String course6 = "GraduateCourseU3";
+        final String course7 = "CourseU4";
+        final String course8 = "GraduateCourseU4";
+        final String course15 = "Course15";
+        final String course16 = "Course16";
+        final String course17 = "GraduateCourse17";
+        final String course18 = "GraduateCourse18";
 
-        final String professor  = "FullProfessor1";
+        final String professor = "FullProfessor1";
         final String professor0 = "AssociateProfessor0";
         final String professor1 = "AssociateProfessor1";
         final String professor2 = "AssociateProfessor2";

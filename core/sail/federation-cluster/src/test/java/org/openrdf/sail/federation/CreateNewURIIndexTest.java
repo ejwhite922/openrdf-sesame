@@ -85,11 +85,11 @@ public class CreateNewURIIndexTest {
         final String tableNewURI13 = "new_URI_index_13";
         final String tableNewURI15 = "new_URI_index_15";
         final String zkServer1 = "192.168.33.10:2181";
-        final String userName = "root";
-        final String passWord = "root";
+        final String username = "root";
+        final String password = "root";
 
         final Instance inst1 = new ZooKeeperInstance(instanceName, zkServer1);
-        final Connector conn1 = inst1.getConnector(userName, new PasswordToken(passWord));
+        final Connector conn1 = inst1.getConnector(username, new PasswordToken(password));
 
         final Scanner scan1 = conn1.createScanner(tableURI, new Authorizations());
 

@@ -10,6 +10,7 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.federation.config.ClusterFederationConfig;
 
 public class ClusterFederationTest {
     private static final Logger log = Logger.getLogger(ClusterFederationTest.class);
@@ -67,11 +68,17 @@ public class ClusterFederationTest {
         try {
             log.info("Connecting to SailRepository.");
             // Overlap list info
-//            final String instanceName = "dev";
-//            final String tableName = "rya_overlap";
+            final ClusterFederationConfig config = new ClusterFederationConfig();
+            final String instanceName = "dev";
+            final String tableName = "rya_overlap";
             final String zkServer = "localhost:2181";
-//            final String userName = "root";
-//            final String passWord = "root";
+            final String username = "root";
+            final String password = "root";
+            config.setInstanceName(instanceName);
+            config.setTableName(tableName);
+            config.setZkServer(zkServer);
+            config.setUsername(username);
+            config.setPassword(password);
 
             // Federation of 1,2
 //            final Federation federation12 = new Federation();
@@ -79,13 +86,13 @@ public class ClusterFederationTest {
 //            federation12.addMember(repo2);
 
             // Cluster federation of 1,2
-            final ClusterFederation clusterFederation12 = new ClusterFederation(zkServer);
+            final ClusterFederation clusterFederation12 = new ClusterFederation(config);
 //            final Federation clusterFederation12 = new Federation();
             clusterFederation12.addMember(repo1);
             clusterFederation12.addMember(repo2);
 
             // Cluster federation of 3, 4
-            final ClusterFederation clusterFederation34 = new ClusterFederation(zkServer);
+            final ClusterFederation clusterFederation34 = new ClusterFederation(config);
 //            final Federation clusterFederation34 = new Federation();
             clusterFederation34.addMember(repo3);
             clusterFederation34.addMember(repo4);

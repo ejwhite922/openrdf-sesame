@@ -48,20 +48,20 @@ public class CreateOverlapTest {
         final String zkServer3 = "192.168.33.30:2181";
         final String zkServer5 = "192.168.33.50:2181";
 
-        final String userName = "root";
+        final String username = "root";
 
-        final String passWord = "root";
+        final String password = "root";
 
         final long start = System.currentTimeMillis();
 
         final Instance inst1 = new ZooKeeperInstance(instanceName, zkServer1);
-        final Connector conn1 = inst1.getConnector(userName, new PasswordToken(passWord));
+        final Connector conn1 = inst1.getConnector(username, new PasswordToken(password));
 
         final Instance inst3 = new ZooKeeperInstance(instanceName, zkServer3);
-        final Connector conn3 = inst3.getConnector(userName, new PasswordToken(passWord));
+        final Connector conn3 = inst3.getConnector(username, new PasswordToken(password));
 
         final Instance inst5 = new ZooKeeperInstance(instanceName, zkServer5);
-        final Connector conn5 = inst5.getConnector(userName, new PasswordToken(passWord));
+        final Connector conn5 = inst5.getConnector(username, new PasswordToken(password));
 
         final List<String>overlap = new ArrayList<String>();
 

@@ -83,8 +83,8 @@ public class ClusterFederationQueryTest {
 //            final String instanceName = "dev";
 //            final String tableName = "rya_overlap";
 //            final String zkServer = "localhost:2181";
-//            final String userName = "root";
-//            final String passWord = "root";
+//            final String username = "root";
+//            final String password = "root";
 
 
 //            // Federation of 12,34

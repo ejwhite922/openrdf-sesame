@@ -98,14 +98,14 @@ public class OverlapList {
     /**
      * Get connection
      *
-     * @param userName a valid accumulo user.
-     * @param passWord a UTF-8 encoded password.
+     * @param username a valid accumulo user.
+     * @param password a UTF-8 encoded password.
      * @throws AccumuloException
      * @throws AccumuloSecurityException
      */
-    public void createConnection(final String userName, final String passWord) throws AccumuloException, AccumuloSecurityException {
+    public void createConnection(final String username, final String password) throws AccumuloException, AccumuloSecurityException {
         instance = new ZooKeeperInstance(instanceName, zkServer);
-        conn = instance.getConnector(userName, new PasswordToken(passWord));
+        conn = instance.getConnector(username, new PasswordToken(password));
     }
 
     /**
@@ -201,10 +201,10 @@ public class OverlapList {
         final String zkServer = "192.168.33.50:2181";
         final OverlapList at = new OverlapList(zkServer, instanceName);
 
-        final String userName = "root";
-        final String passWord = "root";
+        final String username = "root";
+        final String password = "root";
 
-        at.createConnection(userName, passWord);
+        at.createConnection(username, password);
         at.selectTable(tableName);
         final Scanner sc = at.createScanner();
 

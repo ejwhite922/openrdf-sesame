@@ -33,9 +33,8 @@ import org.openrdf.sail.federation.ClusterFederation;
  *
  * @author vagrant
  */
-public class ClusterFederationFactory implements SailFactory, RepositoryResolverClient{
+public class ClusterFederationFactory implements SailFactory, RepositoryResolverClient {
     public static final String SAIL_TYPE = "openrdf:ClusterFederation";
-    private String zkServer = "localhost:2181";
     private RepositoryResolver resolver;
 
     @Override
@@ -56,8 +55,7 @@ public class ClusterFederationFactory implements SailFactory, RepositoryResolver
         }
         assert config instanceof ClusterFederationConfig;
         final ClusterFederationConfig cfg = (ClusterFederationConfig) config;
-        zkServer = cfg.getZkServer();
-        final ClusterFederation sail = new ClusterFederation(zkServer);
+        final ClusterFederation sail = new ClusterFederation(cfg);
         for (final RepositoryImplConfig member : cfg.getMembers()) {
             final RepositoryFactory factory = RepositoryRegistry.getInstance().get(
                     member.getType());

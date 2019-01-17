@@ -55,8 +55,8 @@ public class FederationTest{
 //            final String instanceName = "dev";
 //            final String tableName = "rya_overlap";
 //            final String zkServer = "localhost:2181";
-//            final String userName = "root";
-//            final String passWord = "root";
+//            final String username = "root";
+//            final String password = "root";
 
             // Cluster federation of 1, 2
 //            final ClusterFederation clusterFederation12 = new ClusterFederation(zkServer);

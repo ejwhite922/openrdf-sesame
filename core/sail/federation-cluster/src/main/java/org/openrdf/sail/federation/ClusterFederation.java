@@ -26,6 +26,7 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.sail.SailConnection;
 import org.openrdf.sail.SailException;
+import org.openrdf.sail.federation.config.ClusterFederationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,21 +37,28 @@ public class ClusterFederation extends Federation {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClusterFederation.class);
 
     private final List<Repository> members = new ArrayList<Repository>();
-    private final String zkServer;
+    private final ClusterFederationConfig config;
 
     /**
      * Creates a new instance of {@link ClusterFederation}.
-     * @param zkServer the zookeeper host server. (not null)
      */
-    public ClusterFederation(final String zkServer) {
-        this.zkServer = checkNotNull(zkServer);
+    public ClusterFederation() {
+        this(new ClusterFederationConfig());
     }
 
     /**
-     * @return the zookeeper host server
+     * Creates a new instance of {@link ClusterFederation}.
+     * @param config the {@link ClusterFederationConfig}. (not null)
      */
-    public String getZkServer() {
-        return zkServer;
+    public ClusterFederation(final ClusterFederationConfig config) {
+    	this.config = checkNotNull(config);
+    }
+
+    /**
+     * @return the {@link ClusterFederationConfig}.
+     */
+    public ClusterFederationConfig getConfig() {
+        return config;
     }
 
     @Override

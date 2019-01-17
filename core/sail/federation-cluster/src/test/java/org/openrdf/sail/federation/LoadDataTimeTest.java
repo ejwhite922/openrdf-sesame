@@ -32,14 +32,14 @@ public class LoadDataTimeTest {
         final String instanceName = "dev";
         final String tableURI = "URI_index";
         final String zkServer1 = "192.168.33.50:2181";
-        final String userName = "root";
-        final String passWord = "root";
+        final String username = "root";
+        final String password = "root";
 
 //        final Iterator<Entry<Key, Value>> iterator1;
 //        final Iterator<Entry<Key, Value>> iterator2;
 
         final OverlapList ol1 = new OverlapList(zkServer1, instanceName);
-        ol1.createConnection(userName, passWord);
+        ol1.createConnection(username, password);
         ol1.selectTable(tableURI);
 
         final Scanner sc1 = ol1.createScanner();

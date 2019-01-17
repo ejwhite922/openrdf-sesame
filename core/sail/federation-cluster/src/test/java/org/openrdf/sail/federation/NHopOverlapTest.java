@@ -88,21 +88,21 @@ public class NHopOverlapTest {
         final String zkServer2 = "192.168.33.20:2181";
 
 
-        final String userName = "root";
+        final String username = "root";
 
-        final String passWord = "root";
+        final String password = "root";
 
         final Set<String> overlap = new HashSet<String>();
         final Set<String> newOverlap = new HashSet<String>();
 
         final Instance inst1 = new ZooKeeperInstance(instanceName, zkServer1);
-        final Connector conn1 = inst1.getConnector(userName, new PasswordToken(passWord));
+        final Connector conn1 = inst1.getConnector(username, new PasswordToken(password));
         final Scanner scanSPO1 = conn1.createScanner(tableSPO, new Authorizations());
 
         final Scanner scanOverlap = conn1.createScanner(tableOverlap, new Authorizations());
 
         final Instance inst2 = new ZooKeeperInstance(instanceName, zkServer2);
-        final Connector conn2 = inst2.getConnector(userName, new PasswordToken(passWord));
+        final Connector conn2 = inst2.getConnector(username, new PasswordToken(password));
         final Scanner scanSPO2 = conn2.createScanner(tableSPO, new Authorizations());
 
         String key = null;

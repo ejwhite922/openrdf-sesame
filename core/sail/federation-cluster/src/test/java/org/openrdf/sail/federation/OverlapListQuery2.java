@@ -34,10 +34,10 @@ public class OverlapListQuery2 {
         final String zkServer = "localhost:2181";
         final OverlapList at = new OverlapList(zkServer, instanceName);
 
-        final String userName = "root";
-        final String passWord = "root";
+        final String username = "root";
+        final String password = "root";
 
-        at.createConnection(userName, passWord);
+        at.createConnection(username, password);
         at.selectTable(tableName);
         final Scanner sc = at.createScanner();
 

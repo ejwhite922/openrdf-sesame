@@ -47,11 +47,11 @@ public class CreateBloomFilterTest {
         final String instanceName = "dev";
         final String tableURI = "URI_index";
         final String zkServer1 = "192.168.33.30:2181";
-        final String userName = "root";
-        final String passWord = "root";
+        final String username = "root";
+        final String password = "root";
 
         final Instance instance = new ZooKeeperInstance(instanceName, zkServer1);
-        final Connector conn = instance.getConnector(userName, new PasswordToken(passWord));
+        final Connector conn = instance.getConnector(username, new PasswordToken(password));
         final Scanner scanURI = conn.createScanner(tableURI, new Authorizations());
 
         final long start = System.currentTimeMillis();
