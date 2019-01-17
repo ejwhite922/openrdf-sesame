@@ -51,7 +51,7 @@ public class ClusterFederation extends Federation {
      * @param config the {@link ClusterFederationConfig}. (not null)
      */
     public ClusterFederation(final ClusterFederationConfig config) {
-    	this.config = checkNotNull(config);
+        this.config = checkNotNull(config);
     }
 
     /**

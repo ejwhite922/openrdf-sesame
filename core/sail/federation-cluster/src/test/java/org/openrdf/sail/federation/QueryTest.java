@@ -45,7 +45,8 @@ public class QueryTest {
     private static final String REPOSITORY_ID_1 = "large";
 
     public static void main(final String[] args) throws Exception {
-        final String log4jConfPath = "/home/vagrant/accumulo-1.7.1/conf/log4j.properties";
+        final String log4jConfPath = "/accumulo-1.6.2/conf/templates/log4j.properties";
+//        final String log4jConfPath = "/home/vagrant/accumulo-1.7.1/conf/log4j.properties";
         PropertyConfigurator.configure(log4jConfPath);
 
         // Repository 1

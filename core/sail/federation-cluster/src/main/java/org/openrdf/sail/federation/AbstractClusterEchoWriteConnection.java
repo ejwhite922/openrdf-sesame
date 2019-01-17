@@ -31,12 +31,11 @@ import org.openrdf.sail.SailException;
  * @author James Leigh
  */
 abstract class AbstractClusterEchoWriteConnection extends AbstractClusterFederationConnection {
-
-	/**
-	 * Creates a new instance of {@link AbstractClusterEchoWriteConnection}.
-	 * @param federation
-	 * @param members
-	 */
+    /**
+     * Creates a new instance of {@link AbstractClusterEchoWriteConnection}.
+     * @param federation
+     * @param members
+     */
     public AbstractClusterEchoWriteConnection(final ClusterFederation federation, final List<RepositoryConnection> members) {
         super(federation, members);
     }
