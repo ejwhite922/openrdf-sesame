@@ -16,8 +16,7 @@
 
 	<xsl:template match="sparql:sparql">
 		<script src="../../scripts/create.js" type="text/javascript"></script>
-		<script src="../../scripts/create-federate.js" type="text/javascript">
-		</script>
+		<script src="../../scripts/create-federate.js" type="text/javascript"></script>
 		<form action="create" method="post">
 			<table class="dataentry">
 				<tbody>
@@ -27,7 +26,7 @@
 						</th>
 						<td>
 							<select id="type" name="type">
-								<option value="ClusterFederation">Cluster Federation Store</option>
+								<option value="federate-cluster">Cluster Federation Store</option>
 							</select>
 						</td>
 						<td></td>

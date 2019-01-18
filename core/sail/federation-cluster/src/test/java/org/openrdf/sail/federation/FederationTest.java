@@ -1,6 +1,5 @@
 package org.openrdf.sail.federation;
 
-import org.apache.log4j.Logger;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryLanguage;
@@ -9,9 +8,11 @@ import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.http.HTTPRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FederationTest{
-    private static final Logger log = Logger.getLogger(FederationTest.class);
+    private static final Logger log = LoggerFactory.getLogger(FederationTest.class);
 
 //    private static final boolean USE_MOCK_INSTANCE = false;
 //    private static final boolean PRINT_QUERIES = false;
@@ -29,6 +30,7 @@ public class FederationTest{
 //    private static final String REPOSITORY_ID_4 = "RyaAccumulo_4";
 
     public static void main(final String[] args) throws Exception {
+        log.info("Starting " + FederationTest.class.getSimpleName() + "...");
         // Repository 1
         final Repository repo1 = new HTTPRepository(SESAME_SERVER_2, REPOSITORY_ID_2);
         repo1.initialize();

@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author vagrant
  */
-public class RepositoryManagerClusterFederator {
+public class RepositoryManagerClusterFederator extends RepositoryManagerFederator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RepositoryManagerClusterFederator.class);
 
@@ -70,6 +70,7 @@ public class RepositoryManagerClusterFederator {
      *        becomes the manager of any created federations
      */
     public RepositoryManagerClusterFederator(final RepositoryManager manager) {
+        super(manager);
         this.manager = manager;
         this.valueFactory = manager.getSystemRepository().getValueFactory();
     }
@@ -99,6 +100,7 @@ public class RepositoryManagerClusterFederator {
      * @throws OpenRDFException
      *         if a problem otherwise occurs while creating the federation
      */
+    @Override
     public void addFed(final String fedID, final String description, final Collection<String> members, final boolean readonly,
             final boolean distinct)
         throws MalformedURLException, OpenRDFException

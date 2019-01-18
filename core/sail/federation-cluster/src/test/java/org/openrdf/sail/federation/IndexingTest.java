@@ -18,7 +18,6 @@ package org.openrdf.sail.federation;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryLanguage;
@@ -28,18 +27,22 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.rio.RDFFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author vagrant
  */
 public class IndexingTest {
-    private static final Logger log = Logger.getLogger(IndexingTest.class);
+    private static final Logger log = LoggerFactory.getLogger(IndexingTest.class);
 
     private static final String SESAME_SERVER = "http://192.168.33.20:8080/openrdf-sesame";
     private static final String REPOSITORY_ID = "RyaAccumulo_2";
 
     public static void main(final String[] args) throws Exception {
+        log.info("Starting " + IndexingTest.class.getSimpleName() + "...");
+
         final Repository repo = new HTTPRepository(SESAME_SERVER, REPOSITORY_ID);
         repo.initialize();
 

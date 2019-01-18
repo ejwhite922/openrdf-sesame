@@ -16,8 +16,6 @@
  */
 package org.openrdf.sail.federation;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryLanguage;
@@ -26,13 +24,15 @@ import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.http.HTTPRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author vagrant
  */
 public class QueryTest {
-    private static final Logger log = Logger.getLogger(QueryTest.class);
+    private static final Logger log = LoggerFactory.getLogger(QueryTest.class);
 
 //    private static final boolean USE_MOCK_INSTANCE = false;
 //    private static final boolean PRINT_QUERIES = false;
@@ -45,10 +45,9 @@ public class QueryTest {
     private static final String REPOSITORY_ID_1 = "large";
 
     public static void main(final String[] args) throws Exception {
-        final String log4jConfPath = "/accumulo-1.6.2/conf/templates/log4j.properties";
 //        final String log4jConfPath = "/home/vagrant/accumulo-1.7.1/conf/log4j.properties";
-        PropertyConfigurator.configure(log4jConfPath);
-
+//        PropertyConfigurator.configure(log4jConfPath);
+        log.info("Starting " + QueryTest.class.getSimpleName() + "...");
         // Repository 1
         final Repository repo1 = new HTTPRepository(SESAME_SERVER_1, REPOSITORY_ID_1);
         repo1.initialize();
@@ -84,7 +83,7 @@ public class QueryTest {
 
             final long end = System.nanoTime();
 
-            log.info(end - start);
+            log.info("" + (end - start));
             BindingSet bindingSet = null;
 
 //            while (result1234.hasNext()) {
@@ -96,7 +95,7 @@ public class QueryTest {
             while (result12.hasNext()) {
                 bindingSet = result12.next();
                 final Value valueOfX = bindingSet.getValue("x");
-                log.info(valueOfX);
+                log.info("" + valueOfX);
             }
 
 //            while (result34.hasNext()) {

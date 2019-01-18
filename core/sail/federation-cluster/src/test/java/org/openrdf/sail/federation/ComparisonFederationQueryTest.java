@@ -16,7 +16,6 @@
  */
 package org.openrdf.sail.federation;
 
-import org.apache.log4j.Logger;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryLanguage;
@@ -25,13 +24,15 @@ import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.http.HTTPRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author vagrant
  */
 public class ComparisonFederationQueryTest {
-    private static final Logger log = Logger.getLogger(ComparisonFederationQueryTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ComparisonFederationQueryTest.class);
 
 //    private static final boolean USE_MOCK_INSTANCE = false;
 //    private static final boolean PRINT_QUERIES = false;
@@ -52,6 +53,7 @@ public class ComparisonFederationQueryTest {
     private static final String REPOSITORY_ID_123456 = "Federation123456";
 
     public static void main(final String[] args) throws Exception {
+        log.info("Starting " + ComparisonFederationQueryTest.class.getSimpleName() + "...");
 //        // Repository 1
 //        final Repository repo1 = new HTTPRepository(SESAME_SERVER_1, REPOSITORY_ID_1);
 //        repo1.initialize();
@@ -109,7 +111,7 @@ public class ComparisonFederationQueryTest {
 
             final long end = System.currentTimeMillis();
 
-            log.info(end - start);
+            log.info("" + (end - start));
 
             long count = 0;
 

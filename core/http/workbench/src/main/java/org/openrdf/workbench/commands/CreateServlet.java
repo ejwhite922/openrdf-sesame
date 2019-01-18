@@ -52,7 +52,6 @@ import org.openrdf.workbench.base.TransformationServlet;
 import org.openrdf.workbench.util.TupleResultBuilder;
 import org.openrdf.workbench.util.WorkbenchRequest;
 
-
 public class CreateServlet extends TransformationServlet {
 
 	private RepositoryManagerFederator rmf;
@@ -100,7 +99,7 @@ public class CreateServlet extends TransformationServlet {
 		if (req.isParameterPresent("type")) {
 			final String type = req.getTypeParameter();
 			federate = "federate".equals(type);
-			clusterFederate="ClusterFederation".equals(type);
+			clusterFederate = "federate-cluster".equals(type);
 			builder.transform(xslPath, "create-" + type + ".xsl");
 		}
 		else {
@@ -108,17 +107,15 @@ public class CreateServlet extends TransformationServlet {
 			clusterFederate=false;
 			builder.transform(xslPath, "create.xsl");
 		}
-		if(federate||clusterFederate){
+		if (federate || clusterFederate) {
 			builder.start(new String[] { "id", "description", "location" });
-		}else{
+		} else{
 			builder.start(new String[] {});
 		}
-//		builder.start(federate ? new String[] { "id", "description", "location" } : new String[] {});
 		builder.link(Arrays.asList(INFO));
-		if (federate||clusterFederate) {
+		if (federate || clusterFederate) {
 			for (RepositoryInfo info : manager.getAllRepositoryInfos()) {
 				String identity = info.getId();
-				System.out.println(identity);
 				if (!SystemRepository.ID.equals(identity)) {
 					builder.result(identity, info.getDescription(), info.getLocation());
 				}
@@ -139,7 +136,7 @@ public class CreateServlet extends TransformationServlet {
 					Boolean.parseBoolean(req.getParameter("readonly")),
 					Boolean.parseBoolean(req.getParameter("distinct")));
 		}
-		else if ("ClusterFederation".equals(type)){
+		else if ("federate-cluster".equals(type)){
 			newID = req.getParameter("Local repository ID");
 			rmcf.addFed(newID, req.getParameter("Repository title"),
 					Arrays.asList(req.getParameterValues("memberID")),
